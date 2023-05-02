@@ -3,11 +3,11 @@ import React from "react";
 import VidaSnap from "../images/vidasnaplogo.png";
 import { SearchIcon, PlusCircleIcon } from "@heroicons/react/outline";
 import { HomeIcon } from "@heroicons/react/solid";
-//import { useSession } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Header() {
-  //   const { data: session } = useSession();
-  //   console.log(session);
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <div className="shadow-sm border-b sticky top-0 bg-white p-5 z-30">
       <div className="flex items-center justify-between max-w-6xl mx-4 xl:mx-auto">
@@ -45,12 +45,19 @@ export default function Header() {
         {/*Right*/}
         <div className="flex space-x-4 items-center">
           <HomeIcon className="hidden md:inline-flex h-6 cursor-pointer hover:scale-125 transition-transform duration-200 ease-out" />
-          <PlusCircleIcon className="h-6 cursor-pointer hover:scale-125 transition-transform duration-200 ease-out" />
-          <img
-            src="https://s2.glbimg.com/bidN4ro-uEHAEJABM4Jx2bRO31w=/0x0:600x900/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_ba3db981e6d14e54bb84be31c923b00c/internal_photos/bs/2021/s/E/X5IaJTRRS3AcI1TFPYSw/2019-11-06-gettyimages-501312488.jpg"
-            alt="Richar Gere"
-            className="h-10 rounded-full cursor-pointer"
-          />
+          {session ? (
+            <>
+              <PlusCircleIcon className="h-6 cursor-pointer hover:scale-125 transition-transform duration-200 ease-out" />
+              <img
+                onClick={signOut}
+                src={session.user.image}
+                alt="Nome usuário"
+                className="h-10 rounded-full cursor-pointer"
+              />
+            </>
+          ) : (
+            <button onClick={signIn}>Entrar</button>
+          )}
         </div>
       </div>
     </div>
